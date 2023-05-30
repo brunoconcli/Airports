@@ -1,4 +1,5 @@
 import LinkedList.LinkedList;
+import LinkedList.Node;
 
 public class Airport {
     private String city;
@@ -25,19 +26,30 @@ public class Airport {
         return this.code;
     }
 
-    public LinkedList<Flight> getLinkedList() {
+    public LinkedList<Flight> getFlightList() {
         return this.flightList;
+    }
+
+    public Flight getFlightByDestination(int destination) throws Exception {
+    
+        Node<Flight> current;
+        for (current = this.flightList.getFirst(); current.getInfo().getDestinationIndex() != destination; current = current.getNext());
+        return current.getInfo();
+    }
+
+    public int getIndexOfFlight(Flight flight) throws Exception {
+        return this.flightList.getIndexOf(flight);
     }
 
     public void pushLast(Flight flight) {
         this.flightList.pushLast(flight);
     }
-    //                                              Flight
-// int destination part of info (this.flightList.getInfo().getDestinationIndex())
-    public void popFlightAt(int destination) throws Exception {
+
+    public void popFlight(int destination) throws Exception {
         if (destination < 0)
             throw new Exception("Destination passed is not valid");
-        this.popFlightAt(destination);
-    }
+            
+        this.flightList.popNodeAt(this.getIndexOfFlight(this.getFlightByDestination(destination)));
+        }
 
 }

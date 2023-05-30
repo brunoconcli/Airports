@@ -1,25 +1,22 @@
 import LinkedList.LinkedList;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        LinkedList<String> list = new LinkedList<>();        
-        list.pushLast("bus");
-        list.pushLast("car");
-        list.pushLast("bike");
-        list.pushLast("boat");
-        list.pushLast("monocycle");
-        
-        System.out.println(list.getNodeAt(1));
-        System.out.println(list.getIndexOf("banana boat"));
-        System.out.println(list.getSize());
+    public static void main(String[] args) {
+        try {       
+            Airport brasilia = new Airport("Brasilia", "BSB"); 
+            brasilia.pushLast(new Flight(5, "107"));
+            brasilia.pushLast(new Flight(4, "270"));
+            brasilia.pushLast(new Flight(3, "285"));
+            brasilia.pushLast(new Flight(2, "090"));
+            
+            
+            System.out.println(brasilia.getFlightList());
+            brasilia.popFlight(3);
+            System.out.println(brasilia.getFlightList());
 
 
-        System.out.println(list.toString()); 
-        list.popNodeAt(0);
-        list.popNodeAt(0);
-        list.popNodeAt(0);
-        list.popNodeAt(0);
-        list.popNodeAt(0);
-        System.out.println(list); 
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

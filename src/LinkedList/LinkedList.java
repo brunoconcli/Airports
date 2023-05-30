@@ -130,12 +130,12 @@ public class LinkedList <X> implements LinkedListInterface<X>
   }
 
   public void popNodeAt(int index) throws Exception {
-    int size = this.getSize();
     if (this.isEmpty()) 
-      throw new Exception("List is empty");    
+    throw new Exception("List is empty");    
+    int size = this.getSize();
     if (index > size)
-      throw new Exception("Index cannot be bigger than the list size (" + size +")");
-      
+    throw new Exception("Index cannot be bigger than the list size (" + size +")");
+    
     if (this.first.equals(this.last)) {
       this.first = this.last = null;
       return;
