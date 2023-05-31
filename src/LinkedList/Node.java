@@ -23,7 +23,6 @@ public class Node <N>{
 	public N getInfo() throws Exception {
 		if (this.info == null)
 			throw new Exception("Node is empty");
-
 		return this.info;
 	}
 

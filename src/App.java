@@ -11,7 +11,7 @@ public class App {
             
             
             System.out.println(brasilia.getFlightList());
-            brasilia.popFlight(3);
+            brasilia.popFlight("1070");
             System.out.println(brasilia.getFlightList());
 
 

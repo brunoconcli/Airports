@@ -30,8 +30,18 @@ public class Airport {
         return this.flightList;
     }
 
-    public Flight getFlightByDestination(int destination) throws Exception {
+    public Flight getFlightByCode(String num) throws Exception {
+        Node<Flight> current = this.flightList.getFirst(); 
+        while(!current.getInfo().getflightNumber().equals(num)) {
+            if (current.getNext() != null)
+                current = current.getNext();
+            else
+                throw new Exception("The passed flight has not been found in this airport");
+        }
+        return current.getInfo();
+    }
     
+    public Flight getFlightByDestination(int destination) throws Exception {
         Node<Flight> current;
         for (current = this.flightList.getFirst(); current.getInfo().getDestinationIndex() != destination; current = current.getNext());
         return current.getInfo();
@@ -45,11 +55,11 @@ public class Airport {
         this.flightList.pushLast(flight);
     }
 
-    public void popFlight(int destination) throws Exception {
-        if (destination < 0)
-            throw new Exception("Destination passed is not valid");
+    public void popFlight(String flightCode) throws Exception {
+        if (code.length() > 3)
+            throw new Exception("Flight number passed is not valid");
             
-        this.flightList.popNodeAt(this.getIndexOfFlight(this.getFlightByDestination(destination)));
+        this.flightList.popNodeAt(this.getIndexOfFlight(this.getFlightByCode(flightCode)));
         }
 
 }
