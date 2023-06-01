@@ -1,30 +1,30 @@
 public class Flight {
-    private int destinationIndex;
+    private String airportCode;
     private String flightNumber;
     
-    public Flight(int destination, String flightNumber) {
-        this.destinationIndex = destination;
+    public Flight(String airportCode, String flightNumber) {
+        this.airportCode = airportCode;
         this.flightNumber = flightNumber;
     }
     
-    public int getDestinationIndex() {
-        return destinationIndex;
+    public String getAirportCode() {
+        return airportCode;
     }
     
-    public void setDestinationIndex(int destinationIndex) {
-        this.destinationIndex = destinationIndex;
+    public void setAirportCode(String airportCode) {
+        this.airportCode = airportCode;
     }
 
-    public String getflightNumber() {
+    public String getFlightNumber() {
         return flightNumber;
     }
     
-    public void setflightNumber(String flightNumber) {
+    public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
     }
 
     @Override
     public String toString() {
-        return this.destinationIndex + " " + this.getflightNumber();
+        return this.airportCode + " " + this.getFlightNumber();
     }
 }

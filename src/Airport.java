@@ -6,16 +6,20 @@ public class Airport {
     private String code;
     private LinkedList<Flight> flightList;
 
-    public Airport(String city, String code) {
+    public Airport(String city, String code) throws Exception {
+        if (code.length() > 3)
+            throw new Exception("Airport code cannot be bigger than 3 letters");
         this.city = city;
         this.code = code;
         this.flightList = new LinkedList<Flight>();
     }
 
-    public Airport(String city, String code, LinkedList<Flight> flightList) {
+    public Airport(String city, String code, LinkedList<Flight> flightList) throws Exception {
+        if (code.length() > 3)
+            throw new Exception("Airport code cannot be bigger than 3 letters");
         this.city = city;
         this.code = code;
-        this.flightList = new LinkedList<Flight>();
+        this.flightList = flightList;
     }
 
     public String getCity() {
@@ -32,7 +36,7 @@ public class Airport {
 
     public Flight getFlightByCode(String num) throws Exception {
         Node<Flight> current = this.flightList.getFirst(); 
-        while(!current.getInfo().getflightNumber().equals(num)) {
+        while(!current.getInfo().getFlightNumber().equals(num)) {
             if (current.getNext() != null)
                 current = current.getNext();
             else
@@ -41,9 +45,9 @@ public class Airport {
         return current.getInfo();
     }
     
-    public Flight getFlightByDestination(int destination) throws Exception {
+    public Flight getFlightByDestination(String destination) throws Exception {
         Node<Flight> current;
-        for (current = this.flightList.getFirst(); current.getInfo().getDestinationIndex() != destination; current = current.getNext());
+        for (current = this.flightList.getFirst(); current.getInfo().getAirportCode() != destination; current = current.getNext());
         return current.getInfo();
     }
 
@@ -55,11 +59,51 @@ public class Airport {
         this.flightList.pushLast(flight);
     }
 
-    public void popFlight(String flightCode) throws Exception {
+    public void popFlightByCode(String flightCode) throws Exception {
         if (code.length() > 3)
             throw new Exception("Flight number passed is not valid");
             
         this.flightList.popNodeAt(this.getIndexOfFlight(this.getFlightByCode(flightCode)));
-        }
+    }
 
+    public static Airport registerAirport(int i) throws Exception {
+        Console.clear();
+
+        System.out.println("\n---" + (i+1) + "º AEROPORTO ---\n");
+        String city = Console.getInputOf("Cidade a qual pertence: ").trim();
+        String code = Console.getInputOf("Sigla do aerporto (3 letras): ").trim().toUpperCase();
+
+        return new Airport(city.substring(0, 1).toUpperCase() + city.substring(1), code);
+    }
+
+    @Override
+    public String toString() {
+        return this.city + " " + this.code;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 2;
+
+        hash = 3 * hash + (this.city).hashCode();
+        hash = 5 * hash + (this.code).hashCode();
+        hash = 7 * hash + new LinkedList<Flight>().hashCode();
+        
+        if (hash < 0) hash = -hash;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (this == obj) return true;
+
+        if (this.getClass() != obj.getClass()) return false;
+        Airport a = (Airport) obj;
+        if (!this.city.equals(a.city)) return false;
+        if (!this.code.equals(a.code)) return false;
+        if (!this.flightList.equals(a.flightList)) return false;
+
+        return true;
+    }
 }

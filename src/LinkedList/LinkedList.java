@@ -170,7 +170,7 @@ public class LinkedList <X> implements LinkedListInterface<X>
 
     try {
       while (current != null) {
-        ret += current.getInfo() + "  ";
+        ret += current.getInfo() + ",  ";
         current=current.getNext();
       }
     } 
