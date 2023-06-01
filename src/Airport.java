@@ -1,7 +1,5 @@
-import Console.Console;
-import LinkedList.LinkedList;
-import LinkedList.Node;
-
+import DataStructure.Exceptions.LinkedListException;
+import DataStructure.LinkedList.LinkedList;
 public class Airport {
     private String city;
     private String code;
@@ -36,61 +34,28 @@ public class Airport {
     }
 
     public Flight getFlightByCode(String num) throws Exception {
-        Node<Flight> current = this.flightList.getFirst(); 
-        while(!current.getInfo().getFlightNumber().equals(num)) {
-            if (current.getNext() != null)
-                current = current.getNext();
-            else
-                throw new Exception("The passed flight has not been found in this airport");
+        for(int i = 0; i < flightList.getSize(); i++) {
+            Flight fly = flightList.getElementAt(i);
+            if(fly.getFlightNumber().equals(num))
+                return fly;
         }
-        return current.getInfo();
+
+        throw new Exception("The passed flight has not been found in this airport");
     }
     
-    public Flight getFlightByDestination(String destination) throws Exception {
-        Node<Flight> current;
-        for (current = this.flightList.getFirst(); current.getInfo().getAirportCode() != destination; current = current.getNext());
-        return current.getInfo();
-    }
-
     public int getIndexOfFlight(Flight flight) throws Exception {
-        return this.flightList.getIndexOf(flight);
+        return this.flightList.indexOf(flight);
     }
 
-    public void pushLast(Flight flight) {
-        this.flightList.pushLast(flight);
+    public void pushLast(Flight flight) throws LinkedListException {
+        this.flightList.addIntoLast(flight);
     }
 
     public void popFlightByCode(String flightCode) throws Exception {
         if (code.length() > 3)
             throw new Exception("Flight number passed is not valid");
             
-        this.flightList.popNodeAt(this.getIndexOfFlight(this.getFlightByCode(flightCode)));
-    }
-
-    public static Airport registerAirport(int i) throws Exception {
-        Airport createdAirport = new Airport("STANDBY", "APT");
-        String city = "", code = "1234";
-        int missFillCount = 0;
-
-
-        while (code.length() > 3) {
-            Console.clear();
-            if (missFillCount > 0)
-                System.out.println("O campo 'Sigla' não foi preenchido corretamente\n");
-            System.out.println("---" + (i+1) + "º AEROPORTO ---\n");
-            city = Console.getInputOf("Cidade a qual pertence: ").trim();
-            code = Console.getInputOf("Sigla do aerporto (3 letras): ").trim().toUpperCase();
-
-            missFillCount++;
-        }
-
-        createdAirport = new Airport(
-            city.substring(0, 1).toUpperCase() + 
-            city.substring(1), code
-        );
-    
-        return createdAirport;
-
+        this.flightList.removeInto(this.getIndexOfFlight(this.getFlightByCode(flightCode)));
     }
 
     @Override
@@ -116,10 +81,11 @@ public class Airport {
         if (this == obj) return true;
 
         if (this.getClass() != obj.getClass()) return false;
+
         Airport a = (Airport) obj;
+
         if (!this.city.equals(a.city)) return false;
         if (!this.code.equals(a.code)) return false;
-        if (!this.flightList.equals(a.flightList)) return false;
 
         return true;
     }

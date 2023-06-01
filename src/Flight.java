@@ -27,4 +27,18 @@ public class Flight {
     public String toString() {
         return this.airportCode + " " + this.getFlightNumber();
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (this == obj) return true;
+
+        if (this.getClass() != obj.getClass()) return false;
+
+        Flight f = (Flight) obj;
+
+        if (!this.airportCode.equals(f.airportCode)) return false;
+        if (!this.flightNumber.equals(f.flightNumber)) return false;
+
+        return true;
+    }
 }

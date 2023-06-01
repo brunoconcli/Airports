@@ -15,9 +15,13 @@ public class LinkedList <X> implements LinkedListInterface<X>
     return this.last;
   }
 
-  public Node<X> getNodeAt(int index) {
+  public Node<X> getNodeAt(int index) throws Exception {
+    if (this.isEmpty())
+      throw new Exception("List is empty");
+    if (index > this.getSize())
+      throw new Exception("index passed outside of list's bounds");
+      
     Node<X> element = this.first;
-    
     for (int c = 0; c != index; c++ ) {
       element = element.getNext();
     }
@@ -26,7 +30,8 @@ public class LinkedList <X> implements LinkedListInterface<X>
 
   public int getIndexOf(X info) throws Exception {
     if (this.isEmpty())
-      throw new Exception("List is empty");
+      return -2;
+
     int index = 0;
     for (Node<X> current = this.first; !current.getInfo().equals(info); current = current.getNext()) {
       if (current.getNext() == null)
@@ -179,8 +184,18 @@ public class LinkedList <X> implements LinkedListInterface<X>
     return ret + "]";
   }
 
-  // @Override
-  // public int hashCode() {
+  @Override
+  @SuppressWarnings("unchecked")
+  public boolean equals(Object obj){
+    if(obj==null) return false;
+    if(this==obj) return true;
 
-  // }
+    if (this.getClass() != obj.getClass()) return false;
+
+    LinkedList<X> l = (LinkedList<X>) obj;
+    if (!this.first.equals(l.first)) return false;
+    if (!this.last.equals(l.last)) return false;
+    
+    return true;
+  }
 }
