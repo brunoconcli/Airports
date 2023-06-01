@@ -67,8 +67,8 @@ public class Runner {
         Runner.showLinkedList(airportList, false);
 
         int index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a adição?: "));
-        if (index == 0 || index > airportList.getSize()) {
-            Console.println("O código passado é inválido");
+        if (index == 0 || index > airportList.getSize()+1) {
+            Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             addFlight();
         }
@@ -79,9 +79,11 @@ public class Runner {
             chosen + " ---\nVoos atuais: " + 
             chosen.getFlightList().toString());
 
-        chosen.pushLast(
-            new Flight(Console.getInputOf("\nAeroporto destino: ").toUpperCase(), 
-            Console.getInputOf("Digite o número do voo: ")));
+        String airportCode = Console.getInputOf("\nAeroporto destino: ").toUpperCase();
+        String flightNumber = Console.getInputOf("Digite o número do voo: ");
+
+
+        chosen.pushLast(new Flight(airportCode, flightNumber));
         Console.println("\nVoo adicionado com sucesso");
 
         Console.pressEnterToContinue();
@@ -94,10 +96,10 @@ public class Runner {
         Runner.showLinkedList(airportList, false);
 
         int index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a remoção?: "));
-        if (index == 0 || index > airportList.getSize()) {
-            Console.println("O código passado é inválido");
+        if (index == 0 || index > airportList.getSize()+1) {
+            Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
-            addFlight();
+            removeFlight();
         }
         Airport chosen = airportList.getElementAt(index-1);
 
@@ -107,10 +109,15 @@ public class Runner {
             chosen.getFlightList().toString());
 
         if (!chosen.getFlightList().isEmpty()) {
-            chosen.popFlightByCode(Console.getInputOf("Digite o número do voo: "));
-            Console.println("\nVoo removido com sucesso.");
-        }
+            try {
+                String flightCode = Console.getInputOf("Digite o número do voo: ");
+                chosen.popFlightByCode(flightCode);
+                Console.println("\nVoo removido com sucesso.");
 
+            } catch(Exception e) {
+                Console.println("O voo digitado não existe nesse aeroporto");
+            }
+        }
         else 
             Console.println("Não há voos agendados neste aeroporto, nada para remover");
 
@@ -123,7 +130,7 @@ public class Runner {
         Console.println("--- Listar todos os voos ---");
 
         Airport chosen;
-        for (int i = 0; i < airportList.getSize(); i++) {
+        for (int i = 0; i <= airportList.getSize(); i++) {
             chosen = airportList.getElementAt(i);
             Console.println(i + " - " + chosen + ", Lista de voos: " + chosen.getFlightList());
         }
@@ -137,10 +144,10 @@ public class Runner {
         Runner.showLinkedList(airportList, false);
 
         int index = Integer.parseInt(Console.getInputOf("Qual aeroporto deseja listar?: "));
-        if (index == 0 || index > airportList.getSize()) {
+        if (index == 0 || index > airportList.getSize()+1) {
             Console.println("O código passado é inválido");
             Console.pressEnterToContinue();
-            addFlight();
+            listFlight();
         }
         Airport chosen = airportList.getElementAt(index-1);
 
@@ -156,7 +163,7 @@ public class Runner {
         int missFillCount = 0;
 
 
-        while (code.length() > 3 || city.isBlank() || code.isBlank()) {
+        while (code.length() != 3 || city.isBlank() || code.isBlank()) {
             if (missFillCount > 0)
             System.out.println("O campo 'Cidade' ou 'Sigla' não foi preenchido corretamente\n");
 
@@ -179,7 +186,7 @@ public class Runner {
 
     public static <X> void showLinkedList(LinkedList<X> list, boolean cls) throws Exception {
         if (cls) Console.clear();
-        for (int i = 0; i < list.getSize(); i++)
+        for (int i = 0; i <= list.getSize(); i++)
             System.out.println((i+1) + " - " + list.getElementAt(i));
     }
 }

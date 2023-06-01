@@ -6,7 +6,7 @@ public class Airport {
     private LinkedList<Flight> flightList;
 
     public Airport(String city, String code) throws Exception {
-        if (code.length() > 3)
+        if (code.length() != 3)
             throw new Exception("Airport code cannot be bigger than 3 letters");
         this.city = city;
         this.code = code;
@@ -33,10 +33,13 @@ public class Airport {
         return this.flightList;
     }
 
-    public Flight getFlightByCode(String num) throws Exception {
+    public Flight getFlightByCode(String code) throws Exception {
+        if (code.length() > 3)
+            throw new Exception("Flight number passed is not valid");
+
         for(int i = 0; i < flightList.getSize(); i++) {
             Flight fly = flightList.getElementAt(i);
-            if(fly.getFlightNumber().equals(num))
+            if(fly.getFlightNumber().equals(code))
                 return fly;
         }
 
@@ -51,11 +54,11 @@ public class Airport {
         this.flightList.addIntoLast(flight);
     }
 
-    public void popFlightByCode(String flightCode) throws Exception {
+    public void popFlightByCode(String code) throws Exception {
         if (code.length() > 3)
             throw new Exception("Flight number passed is not valid");
             
-        this.flightList.removeInto(this.getIndexOfFlight(this.getFlightByCode(flightCode)));
+        this.flightList.removeInto(this.getIndexOfFlight(this.getFlightByCode(code)));
     }
 
     @Override

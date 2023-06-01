@@ -16,11 +16,11 @@ public class Console {
     }
 
     public static void print(String message) {
-        System.out.print(message);
+        System.out.print(Colors.RESET+message);
     }
 
     public static void println(String message) {
-        System.out.println(message);
+        System.out.println(Colors.RESET+message);
     }
 
     public static String getInputOf(String message) throws Exception {
@@ -29,7 +29,7 @@ public class Console {
     }
 
     public static void pressEnterToContinue() throws Exception {
-        Console.getInputOf("\nPress [Enter] to continue...");
+        Console.getInputOf("\nPressione [Enter] para continuar...");
     }
 
     public static String listOptions(String[] list) throws Exception {
