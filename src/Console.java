@@ -29,7 +29,7 @@ public class Console {
     }
 
     public static void pressEnterToContinue() throws Exception {
-        Console.getInputOf("Press [Enter] to continue...");
+        Console.getInputOf("\nPress [Enter] to continue...");
     }
 
     public static String listOptions(String[] list) throws Exception {

@@ -67,13 +67,29 @@ public class Airport {
     }
 
     public static Airport registerAirport(int i) throws Exception {
-        Console.clear();
+        Airport createdAirport = new Airport("STANDBY", "APT");
+        String city = "", code = "1234";
+        int missFillCount = 0;
 
-        System.out.println("\n---" + (i+1) + "º AEROPORTO ---\n");
-        String city = Console.getInputOf("Cidade a qual pertence: ").trim();
-        String code = Console.getInputOf("Sigla do aerporto (3 letras): ").trim().toUpperCase();
 
-        return new Airport(city.substring(0, 1).toUpperCase() + city.substring(1), code);
+        while (code.length() > 3) {
+            Console.clear();
+            if (missFillCount > 0)
+                System.out.println("O campo 'Sigla' não foi preenchido corretamente\n");
+            System.out.println("---" + (i+1) + "º AEROPORTO ---\n");
+            city = Console.getInputOf("Cidade a qual pertence: ").trim();
+            code = Console.getInputOf("Sigla do aerporto (3 letras): ").trim().toUpperCase();
+
+            missFillCount++;
+        }
+
+        createdAirport = new Airport(
+            city.substring(0, 1).toUpperCase() + 
+            city.substring(1), code
+        );
+    
+        return createdAirport;
+
     }
 
     @Override
