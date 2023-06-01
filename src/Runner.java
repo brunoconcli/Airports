@@ -1,5 +1,6 @@
-import LinkedList.LinkedList;
 
+import LinkedList.LinkedList;
+import Console.Console;
 public class Runner {
     static LinkedList<Airport> airportList = new LinkedList<Airport>();
 
