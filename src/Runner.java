@@ -29,7 +29,7 @@ public class Runner {
     }
 
     public static boolean codeAlreadyExists(String code) throws Exception {
-        for (int i = 0; i < airportList.getSize()+1; i++) {
+        for (int i = 0; i < airportList.getSize(); i++) {
             if (airportList.getElementAt(i).getCode().equals(code))
                 return true;
         }
@@ -75,7 +75,7 @@ public class Runner {
             addFlight();
         }
 
-        if (index < 0 || index > airportList.getSize()+1) {
+        if (index < 0 || index > airportList.getSize()) {
             Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             addFlight();
@@ -129,7 +129,7 @@ public class Runner {
             Console.pressEnterToContinue();
             removeFlight();
         }
-        if (index < 0 || index > airportList.getSize()+1) {
+        if (index < 0 || index > airportList.getSize()) {
             Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             removeFlight();
@@ -166,7 +166,7 @@ public class Runner {
         Console.println("--- Listar todos os voos ---");
 
         Airport chosen;
-        for (int i = 0; i <= airportList.getSize(); i++) {
+        for (int i = 0; i < airportList.getSize(); i++) {
             chosen = airportList.getElementAt(i);
             Console.println(i + " - " + chosen + ", Lista de voos: " + chosen.getFlightList());
         }
@@ -188,7 +188,7 @@ public class Runner {
             Console.pressEnterToContinue();
             listFlight();
         }
-        if (index < 0 || index > airportList.getSize()+1) {
+        if (index < 0 || index > airportList.getSize()) {
             Console.println("O código passado é inválido");
             Console.pressEnterToContinue();
             listFlight();
@@ -254,7 +254,7 @@ public class Runner {
 
     public static <X> void showLinkedList(LinkedList<X> list, boolean cls) throws Exception {
         if (cls) Console.clear();
-        for (int i = 0; i <= list.getSize(); i++)
+        for (int i = 0; i < list.getSize(); i++)
             System.out.println((i+1) + " - " + list.getElementAt(i));
     }
 }
