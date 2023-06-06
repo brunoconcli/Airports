@@ -214,7 +214,7 @@ public class Runner {
 
         while (code.length() != 3 || city.isBlank() || code.isBlank()) {
             if (missFilled)
-                System.out.println("O campo 'Cidade' ou 'Sigla' não foi preenchido corretamente\n");
+                System.out.println(Colors.YELLOW + "O campo 'Cidade' ou 'Sigla' não foi preenchido corretamente\n" + Colors.RESET);
 
             System.out.println("---" + (i+1) + "º AEROPORTO ---\n");
             city = Console.getInputOf("Cidade a qual pertence: ").trim();
@@ -238,12 +238,17 @@ public class Runner {
 
         Airport newAirport = registerAirport(i);
         if (!alreadyExists(newAirport)) {
-            airportList.addIntoLast(newAirport);
+            if (!codeAlreadyExists(newAirport.getCode()))
+                airportList.addIntoLast(newAirport);
+            else {
+                message = Colors.YELLOW + "Cidades diferentes não podem possuir uma mesma sigla de aeroporto" + Colors.RESET;
+                verifyAndRegister(i);
+            }
         }
         
         else {
-            message = Colors.YELLOW+"O aeroporto passado já existe\n"+Colors.RESET;
-            i--;
+            message = Colors.YELLOW + "O aeroporto passado já existe\n" + Colors.RESET;
+            verifyAndRegister(i);
         }
     }
 
