@@ -37,8 +37,8 @@ public class Airport {
         if (code.length() > 3)
             throw new Exception("Flight number passed is not valid");
 
-        for(int i = 0; i < flightList.getSize(); i++) {
-            Flight fly = flightList.getElementAt(i);
+        for(int i = 0; i < this.flightList.getSize()+1; i++) {
+            Flight fly = this.flightList.getElementAt(i);
             if(fly.getFlightNumber().equals(code))
                 return fly;
         }
