@@ -4,31 +4,22 @@ import Console.Colors;
 import Console.Console;
 public class Runner {
     static LinkedList<Airport> airportList = new LinkedList<Airport>();
+    static int airportsCreated = 0;
+    static String message = "";
 
     public static void start() throws NumberFormatException, Exception {
         Console.clear();
         try {
             
-            int runFor = Integer.parseInt(Console.getInputOf("Quantos aeroportos deseja criar?: "));
-            String message = "";
+            airportsCreated = Integer.parseInt(Console.getInputOf("Quantos aeroportos deseja criar?: "));
 
-            for (int i = 0; i < runFor; i++) {
-                Console.clearWithMessage(message);
-                message = "";
-
-                Airport newAirport = registerAirport(i);
-                if (!alreadyExists(newAirport)) {
-                    airportList.addIntoLast(newAirport);
-                }
-                else {
-                    message = Colors.YELLOW+"O aeroporto passado já existe\n"+Colors.RESET;
-                    i--;
-                }
+            for (int i = 0; i < airportsCreated; i++) {
+                verifyAndRegister(i);
             }
-            menu();
         } catch(NumberFormatException ne) {
             start();
         }
+        menu();
     }
 
     public static boolean alreadyExists(Airport airport) throws Exception {
@@ -36,6 +27,14 @@ public class Runner {
         if (index < 0) return false;
         return true;
     }
+
+    public static boolean codeAlreadyExists(String code) throws Exception {
+        for (int i = 0; i < airportList.getSize()+1; i++) {
+            if (airportList.getElementAt(i).getCode().equals(code))
+                return true;
+        }
+        return false;
+    } 
 
     public static void menu() throws Exception {
         String[] options = {"Adicionar voo", "Remover voo", "Listar voos de Aeroporto", "Listar todos os voos"}; 
@@ -55,7 +54,7 @@ public class Runner {
             case "4": listAllFlights();
                       break;
 
-            default: System.out.println("Digite uma opção válida");
+            default: System.out.println(Colors.YELLOW + "Digite uma opção válida" + Colors.RESET);
                      menu();
                      break;
         }
@@ -64,13 +63,25 @@ public class Runner {
     public static void addFlight() throws Exception {
         Console.clear();
         Console.println("--- Adicionar Voo ---");
+        Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
+        int index = 0;
+        try {
+            index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a adição?: "));
+        }
+        catch(NumberFormatException ne) {
+            Console.println(Colors.YELLOW + "O código passado deve ser um número inteiro" + Colors.RESET);
+            Console.pressEnterToContinue();
+            addFlight();
+        }
 
-        int index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a adição?: "));
-        if (index == 0 || index > airportList.getSize()+1) {
+        if (index < 0 || index > airportList.getSize()+1) {
             Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             addFlight();
+        }
+        else if (index == 0) {
+            menu();
         }
         Airport chosen = airportList.getElementAt(index-1);
 
@@ -80,11 +91,25 @@ public class Runner {
             chosen.getFlightList().toString());
 
         String airportCode = Console.getInputOf("\nAeroporto destino: ").toUpperCase();
+
+        if (!codeAlreadyExists(airportCode)) {
+            if (Console.getInputOf(Colors.YELLOW + "O aerporto passado não existe" + Colors.RESET + "\nDeseja criá-lo? (s/n):").toUpperCase().equals("S")) {
+                Console.clear();
+                verifyAndRegister(airportsCreated);
+            }
+            Console.pressEnterToContinue();
+            addFlight();
+        }
+        if (airportCode.equals(chosen.getCode())) {
+            Console.println(Colors.YELLOW + "O aeroporto passado deve ser distinto do aeroporto escolhido" + Colors.RESET);
+            Console.pressEnterToContinue();
+            addFlight();
+        }
         String flightNumber = Console.getInputOf("Digite o número do voo: ");
 
 
         chosen.pushLast(new Flight(airportCode, flightNumber));
-        Console.println("\nVoo adicionado com sucesso");
+        Console.println(Colors.GREEN + "\nVoo adicionado com sucesso" + Colors.RESET);
 
         Console.pressEnterToContinue();
         menu();
@@ -93,13 +118,24 @@ public class Runner {
     public static void removeFlight() throws Exception {
         Console.clear();
         Console.println("--- Remover Voo ---");
+        Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
-
-        int index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a remoção?: "));
-        if (index == 0 || index > airportList.getSize()+1) {
+        int index = 0;
+        try {
+            index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a remoção?: "));
+        }
+        catch(NumberFormatException ne) {
+            Console.println(Colors.YELLOW + "O código passado deve ser um número inteiro" + Colors.RESET);
+            Console.pressEnterToContinue();
+            removeFlight();
+        }
+        if (index < 0 || index > airportList.getSize()+1) {
             Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             removeFlight();
+        }
+        else if (index == 0) {
+            menu();
         }
         Airport chosen = airportList.getElementAt(index-1);
 
@@ -112,14 +148,14 @@ public class Runner {
             try {
                 String flightCode = Console.getInputOf("Digite o número do voo: ");
                 chosen.popFlightByCode(flightCode);
-                Console.println("\nVoo removido com sucesso.");
+                Console.println(Colors.GREEN + "\nVoo removido com sucesso." + Colors.RESET);
 
             } catch(Exception e) {
                 Console.println("O voo digitado não existe nesse aeroporto");
             }
         }
         else 
-            Console.println("Não há voos agendados neste aeroporto, nada para remover");
+            Console.println(Colors.YELLOW + "Não há voos agendados neste aeroporto, nada para remover" + Colors.RESET);
 
         Console.pressEnterToContinue();
         menu();
@@ -141,13 +177,24 @@ public class Runner {
     public static void listFlight() throws Exception {
         Console.clear();
         Console.println("--- Listar voos ---");
+        Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
-
-        int index = Integer.parseInt(Console.getInputOf("Qual aeroporto deseja listar?: "));
-        if (index == 0 || index > airportList.getSize()+1) {
+        int index = 0;
+        try {
+            index = Integer.parseInt(Console.getInputOf("Qual aeroporto deseja listar?: "));
+        }
+        catch(NumberFormatException ne) {
+            Console.println(Colors.YELLOW + "O código passado deve ser um número inteiro" + Colors.RESET);
+            Console.pressEnterToContinue();
+            listFlight();
+        }
+        if (index < 0 || index > airportList.getSize()+1) {
             Console.println("O código passado é inválido");
             Console.pressEnterToContinue();
             listFlight();
+        }
+        else if (index == 0) {
+            menu();
         }
         Airport chosen = airportList.getElementAt(index-1);
 
@@ -156,22 +203,24 @@ public class Runner {
         Console.pressEnterToContinue();
         menu();
     }
-
+    public static void registerAirport(Airport airport) throws Exception {
+        airportList.addIntoLast(airport);
+    }
     public static Airport registerAirport(int i) throws Exception {
         Airport createdAirport = new Airport("STANDBY", "APT");
         String city = "", code = "1234";
-        int missFillCount = 0;
+        boolean missFilled = false;
 
 
         while (code.length() != 3 || city.isBlank() || code.isBlank()) {
-            if (missFillCount > 0)
-            System.out.println("O campo 'Cidade' ou 'Sigla' não foi preenchido corretamente\n");
+            if (missFilled)
+                System.out.println("O campo 'Cidade' ou 'Sigla' não foi preenchido corretamente\n");
 
             System.out.println("---" + (i+1) + "º AEROPORTO ---\n");
             city = Console.getInputOf("Cidade a qual pertence: ").trim();
             code = Console.getInputOf("Sigla do aerporto (3 letras): ").trim().toUpperCase();
             
-            missFillCount++;
+            missFilled = true;
             Console.clear();
         }
 
@@ -182,6 +231,20 @@ public class Runner {
     
         return createdAirport;
 
+    }
+    public static void verifyAndRegister(int i) throws Exception {
+        Console.clearWithMessage(message);
+        message = "";
+
+        Airport newAirport = registerAirport(i);
+        if (!alreadyExists(newAirport)) {
+            airportList.addIntoLast(newAirport);
+        }
+        
+        else {
+            message = Colors.YELLOW+"O aeroporto passado já existe\n"+Colors.RESET;
+            i--;
+        }
     }
 
     public static <X> void showLinkedList(LinkedList<X> list, boolean cls) throws Exception {
