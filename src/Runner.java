@@ -34,7 +34,7 @@ public class Runner {
                 return true;
         }
         return false;
-    } 
+    }
 
     public static void menu() throws Exception {
         String[] options = {"Adicionar voo", "Remover voo", "Listar voos de Aeroporto", "Listar todos os voos"}; 
@@ -62,7 +62,7 @@ public class Runner {
 
     public static void addFlight() throws Exception {
         Console.clear();
-        Console.println("--- Adicionar Voo ---");
+        Console.println(Colors.GREEN + "--- Adicionar Voo ---" + Colors.RESET);
         Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
         int index = 0;
@@ -70,13 +70,13 @@ public class Runner {
             index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a adição?: "));
         }
         catch(NumberFormatException ne) {
-            Console.println(Colors.YELLOW + "O código passado deve ser um número inteiro" + Colors.RESET);
+            Console.println(Colors.YELLOW + "O ínidce passado deve ser um número inteiro" + Colors.RESET);
             Console.pressEnterToContinue();
             addFlight();
         }
 
         if (index < 0 || index > airportList.getSize()) {
-            Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
+            Console.println(Colors.YELLOW+"O ínidce passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             addFlight();
         }
@@ -86,11 +86,14 @@ public class Runner {
         Airport chosen = airportList.getElementAt(index-1);
 
         Console.println(
+            Colors.CYAN +
             "\n--- Escolhido: " + 
             chosen + " ---\nVoos atuais: " + 
-            chosen.getFlightList().toString());
+            chosen.getFlightList().toString() +
+            Colors.RESET
+        );
 
-        String airportCode = Console.getInputOf("\nAeroporto destino: ").toUpperCase();
+        String airportCode = Console.getInputOf("\nAeroporto destino: ").trim().toUpperCase();
 
         if (!codeAlreadyExists(airportCode)) {
             if (Console.getInputOf(Colors.YELLOW + "O aerporto passado não existe" + Colors.RESET + "\nDeseja criá-lo? (s/n):").toUpperCase().equals("S")) {
@@ -106,18 +109,35 @@ public class Runner {
             addFlight();
         }
         String flightNumber = Console.getInputOf("Digite o número do voo: ");
+        try {
+            Integer.valueOf(flightNumber);
+            chosen.getFlightByCode(flightNumber);
+            Console.println(Colors.YELLOW + "\nO código de voo passado já existe, insira outro código" + Colors.RESET);
+            Console.pressEnterToContinue();
+            addFlight();
+        }
+        catch (NumberFormatException ne) {
+            Console.println(Colors.YELLOW + "\nO código passado deve conter apenas números" + Colors.RESET);
+            Console.pressEnterToContinue();
 
-
-        chosen.pushLast(new Flight(airportCode, flightNumber));
-        Console.println(Colors.GREEN + "\nVoo adicionado com sucesso" + Colors.RESET);
-
-        Console.pressEnterToContinue();
-        menu();
+            addFlight();
+        }
+        catch(Exception e) {
+            if (chosen.getFlightList().isEmpty())
+                chosen.pushFirst(new Flight(airportCode, flightNumber));
+            else
+                chosen.pushLast(new Flight(airportCode, flightNumber));
+    
+            Console.println(Colors.GREEN + "\nVoo adicionado com sucesso" + Colors.RESET);
+    
+            Console.pressEnterToContinue();
+            menu();
+        }
     }
 
     public static void removeFlight() throws Exception {
         Console.clear();
-        Console.println("--- Remover Voo ---");
+        Console.println(Colors.RED + "--- Remover Voo ---" + Colors.RESET);
         Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
         int index = 0;
@@ -125,12 +145,12 @@ public class Runner {
             index = Integer.parseInt(Console.getInputOf("Qual o aeroporto em que deseja fazer a remoção?: "));
         }
         catch(NumberFormatException ne) {
-            Console.println(Colors.YELLOW + "O código passado deve ser um número inteiro" + Colors.RESET);
+            Console.println(Colors.YELLOW + "O índice passado deve ser um número inteiro" + Colors.RESET);
             Console.pressEnterToContinue();
             removeFlight();
         }
         if (index < 0 || index > airportList.getSize()) {
-            Console.println(Colors.YELLOW+"O código passado é inválido"+Colors.RESET);
+            Console.println(Colors.YELLOW+"O índice passado é inválido"+Colors.RESET);
             Console.pressEnterToContinue();
             removeFlight();
         }
@@ -140,9 +160,12 @@ public class Runner {
         Airport chosen = airportList.getElementAt(index-1);
 
         Console.println(
+            Colors.MAGENTA + 
             "\n--- Escolhido: " + 
             chosen + " ---\nVoos atuais: " + 
-            chosen.getFlightList().toString());
+            chosen.getFlightList().toString() +
+            Colors.RESET
+            );
 
         if (!chosen.getFlightList().isEmpty()) {
             try {
@@ -151,7 +174,7 @@ public class Runner {
                 Console.println(Colors.GREEN + "\nVoo removido com sucesso." + Colors.RESET);
 
             } catch(Exception e) {
-                Console.println("O voo digitado não existe nesse aeroporto");
+                Console.println(Colors.YELLOW + "O voo digitado não existe nesse aeroporto" + Colors.RESET);
             }
         }
         else 
@@ -163,7 +186,7 @@ public class Runner {
 
     public static void listAllFlights() throws Exception {
         Console.clear();
-        Console.println("--- Listar todos os voos ---");
+        Console.println(Colors.BLUE_UNDERLINED + "--- Listar todos os voos ---\n" + Colors.RESET);
 
         Airport chosen;
         for (int i = 0; i < airportList.getSize(); i++) {
@@ -176,7 +199,7 @@ public class Runner {
 
     public static void listFlight() throws Exception {
         Console.clear();
-        Console.println("--- Listar voos ---");
+        Console.println(Colors.BLUE + "--- Listar voos ---" + Colors.RESET);
         Console.println("0 - Sair");
         Runner.showLinkedList(airportList, false);
         int index = 0;
@@ -198,7 +221,7 @@ public class Runner {
         }
         Airport chosen = airportList.getElementAt(index-1);
 
-        Console.println("Escolhido: " + chosen + ", Lista de voos: " + chosen.getFlightList());
+        Console.println(Colors.CYAN + "Escolhido: " + chosen + ", Lista de voos: " + chosen.getFlightList() + Colors.RESET);
 
         Console.pressEnterToContinue();
         menu();

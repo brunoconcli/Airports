@@ -50,6 +50,10 @@ public class Airport {
         return this.flightList.indexOf(flight);
     }
 
+    public void pushFirst(Flight flight) throws LinkedListException {
+        this.flightList.addIntoFirst(flight);
+    }
+
     public void pushLast(Flight flight) throws LinkedListException {
         this.flightList.addIntoLast(flight);
     }
