@@ -36,6 +36,18 @@ public class Runner {
         return false;
     }
 
+    // public static String getCityByAirportCode(String airportCode) throws Exception {
+    //     if (!codeAlreadyExists(airportCode)) {
+    //         return "O aeroporto passado não existe";
+    //     }
+    //     Airport airport;
+    //     for (int i = 0; i < airportList.getSize(); i++) {
+    //         airport = airportList.getElementAt(i);
+    //     }
+
+    //     // return airport.getCity();
+    // }
+
     public static void menu() throws Exception {
         String[] options = {"Adicionar voo", "Remover voo", "Listar voos de Aeroporto", "Listar todos os voos"}; 
 
