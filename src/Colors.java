@@ -1,4 +1,4 @@
-package Console;
+
 
 public enum Colors {
     //Color end string, color reset

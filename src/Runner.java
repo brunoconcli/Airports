@@ -1,19 +1,33 @@
-
+/**
+ * Class responsible for the exibition of the usage interface 
+ * containing methods to manage users input and respective 
+ * responses and exhibitions
+ * 
+ * The class contains methods that manage the Menu, flight 
+ * addition, flight removal and airports exhibitions 
+ * 
+ * Sirlene de Fátima da Silva 
+ * @author Bruno Concli
+ * @author Miguel Lopes
+ */
 import DataStructure.LinkedList.LinkedList;
-import Console.Colors;
-import Console.Console;
 public class Runner {
     static LinkedList<Airport> airportList = new LinkedList<Airport>();
-    static int airportsCreated = 0;
+    static int airportsToBeCreated = 0;
     static String message = "";
 
     public static void start() throws NumberFormatException, Exception {
         Console.clear();
+        Console.println(message);
         try {
             
-            airportsCreated = Integer.parseInt(Console.getInputOf("Quantos aeroportos deseja criar?: "));
+            airportsToBeCreated = Integer.parseInt(Console.getInputOf("Quantos aeroportos deseja criar?: "));
 
-            for (int i = 0; i < airportsCreated; i++) {
+            if (airportsToBeCreated == 0 && airportList.isEmpty()) {
+                message = Colors.YELLOW + "É necessário haver pelo menos um aeroporto para iniciar o programa" + Colors.RESET;   
+                start();
+            }
+            for (int i = 0; i < airportsToBeCreated; i++) {
                 verifyAndRegister(i);
             }
         } catch(NumberFormatException ne) {
@@ -110,7 +124,7 @@ public class Runner {
         if (!codeAlreadyExists(airportCode)) {
             if (Console.getInputOf(Colors.YELLOW + "O aerporto passado não existe" + Colors.RESET + "\nDeseja criá-lo? (s/n):").toUpperCase().equals("S")) {
                 Console.clear();
-                verifyAndRegister(airportsCreated);
+                verifyAndRegister(airportsToBeCreated);
             }
             Console.pressEnterToContinue();
             addFlight();
