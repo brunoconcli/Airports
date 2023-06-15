@@ -16,6 +16,14 @@ public class Runner {
     static int airportsToBeCreated = 0;
     static String message = "";
 
+    /**
+     * Allows the inserption of new Airport objects into the airportList, 
+     * repeating according to the received input that represent the amount
+     * of objects
+     * 
+     * @throws NumberFormatException
+     * @throws Exception in case the input received is passed incorrectly
+     */
     public static void start() throws NumberFormatException, Exception {
         Console.clear();
         Console.println(message);
@@ -36,12 +44,24 @@ public class Runner {
         menu();
     }
 
+    /**
+     * 
+     * @param airport
+     * @return True in case the Airport object passed is already in the list
+     * @throws Exception in case the parameter is passed incorrectly
+     */
     public static boolean alreadyExists(Airport airport) throws Exception {
         int index = airportList.indexOf(airport);
         if (index < 0) return false;
         return true;
     }
 
+    /**
+     * 
+     * @param code
+     * @return true in case the Flight code is already present in the airport list
+     * @throws Exception in case the index is passed incorrectly
+     */
     public static boolean codeAlreadyExists(String code) throws Exception {
         for (int i = 0; i < airportList.getSize(); i++) {
             if (airportList.getElementAt(i).getCode().equals(code))
@@ -50,18 +70,31 @@ public class Runner {
         return false;
     }
 
-    // public static String getCityByAirportCode(String airportCode) throws Exception {
-    //     if (!codeAlreadyExists(airportCode)) {
-    //         return "O aeroporto passado não existe";
-    //     }
-    //     Airport airport;
-    //     for (int i = 0; i < airportList.getSize(); i++) {
-    //         airport = airportList.getElementAt(i);
-    //     }
+    /**
+     * 
+     * @param airportCode
+     * @return the attribute name of the airport that contais the passed code, present in the airportList
+     * @throws Exception in case the airport is passed incorrectly
+     */
+    public static String getCityByAirportCode(String airportCode) throws Exception {
+        if (!codeAlreadyExists(airportCode)) {
+            return "O aeroporto passado não existe";
+        }
+        Airport airport = airportList.getFirstElement();
+        for (int i = 0; i < airportList.getSize(); i++) {
+            airport = airportList.getElementAt(i);
+            if (airport.getCode().equals(airportCode))
+                break;
+        }
 
-    //     // return airport.getCity();
-    // }
+        return airport.getCity();
+    }
 
+    /**
+     * Method that exhibes all the functionalities in the program and allow the navigation through each one of them
+     * 
+     * @throws Exception according to the incorrect usage of the methods called in the swtch case sctructure
+     */
     public static void menu() throws Exception {
         String[] options = {"Adicionar voo", "Remover voo", "Listar voos de Aeroporto", "Listar todos os voos"}; 
 
@@ -86,6 +119,11 @@ public class Runner {
         }
     }
 
+    /**
+     * Method that exhibes options to and allows the creation of new aiports added into the airportlist
+     * 
+     * @throws Exception in case of miss-passed informations 
+     */
     public static void addFlight() throws Exception {
         Console.clear();
         Console.println(Colors.GREEN + "--- Adicionar Voo ---" + Colors.RESET);
@@ -154,13 +192,18 @@ public class Runner {
             else
                 chosen.pushLast(new Flight(airportCode, flightNumber));
     
-            Console.println(Colors.GREEN + "\nVoo adicionado com sucesso" + Colors.RESET);
+            Console.println(Colors.GREEN + "\nVoo adicionado com sucesso a cidade " + getCityByAirportCode(airportCode) + Colors.RESET);
     
             Console.pressEnterToContinue();
             menu();
         }
     }
 
+    /**
+     * Method that exhibes options to and allows the removal of aiports present in the airportlist
+     * 
+     * @throws Exception in case of miss-passed informations 
+     */
     public static void removeFlight() throws Exception {
         Console.clear();
         Console.println(Colors.RED + "--- Remover Voo ---" + Colors.RESET);
@@ -210,6 +253,11 @@ public class Runner {
         menu();
     }
 
+    /**
+     * Method that exhibes every airport and their respective flight lists present into the airportList
+     * 
+     * @throws Exception in case of incorrectly passed parameter in the getElement() method 
+     */
     public static void listAllFlights() throws Exception {
         Console.clear();
         Console.println(Colors.BLUE_UNDERLINED + "--- Listar todos os voos ---\n" + Colors.RESET);
@@ -223,6 +271,11 @@ public class Runner {
         menu();
     }
 
+    /**
+     * Method that exhibes the informations of the selected airport by users input present in the aiportlist
+     * 
+     * @throws Exception according to Exceptions into showLinkedList() method
+     */
     public static void listFlight() throws Exception {
         Console.clear();
         Console.println(Colors.BLUE + "--- Listar voos ---" + Colors.RESET);
@@ -252,6 +305,13 @@ public class Runner {
         Console.pressEnterToContinue();
         menu();
     }
+
+    /**
+     * Allows the creation of new airports
+     * 
+     * @param airport
+     * @throws Exception in case of the parameter airport being passed incorrectly
+     */
     public static void registerAirport(Airport airport) throws Exception {
         airportList.addIntoLast(airport);
     }
@@ -281,6 +341,13 @@ public class Runner {
         return createdAirport;
 
     }
+
+    /**
+     * Verifies wheter every information has been passed correctly and if so creates the airport and adds it to the list
+     * 
+     * @param i
+     * @throws Exception
+     */
     public static void verifyAndRegister(int i) throws Exception {
         Console.clearWithMessage(message);
         message = "";
@@ -301,6 +368,14 @@ public class Runner {
         }
     }
 
+    /**
+     * Exhibes every airport present in the airportList, one by line
+     * 
+     * @param <X>
+     * @param list
+     * @param cls
+     * @throws Exception in case of miss-passed parameter of the method getElementAt(int index)
+     */
     public static <X> void showLinkedList(LinkedList<X> list, boolean cls) throws Exception {
         if (cls) Console.clear();
         for (int i = 0; i < list.getSize(); i++)
